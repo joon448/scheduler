@@ -28,5 +28,8 @@ public class ScheduleService {
         return scheduleRepository.findAll().stream().map(ScheduleResponseDto::new).collect(Collectors.toList());
     }
 
-
+    @Transactional(readOnly = true)
+    public List<ScheduleResponseDto> findByName(String name) {
+        return scheduleRepository.findByName(name).stream().map(ScheduleResponseDto::new).collect(Collectors.toList());
+    }
 }
