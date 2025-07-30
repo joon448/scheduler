@@ -8,6 +8,7 @@ import org.example.scheduler.dto.ScheduleResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,11 +26,19 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public List<ScheduleResponseDto> findAll(){
-        return scheduleRepository.findAll().stream().map(ScheduleResponseDto::new).collect(Collectors.toList());
+        return scheduleRepository.findAll()
+                .stream()
+                .sorted(Comparator.comparing(Schedule::getModifiedAt).reversed())
+                .map(ScheduleResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<ScheduleResponseDto> findByName(String name) {
-        return scheduleRepository.findByName(name).stream().map(ScheduleResponseDto::new).collect(Collectors.toList());
+        return scheduleRepository.findByName(name)
+                .stream()
+                .sorted(Comparator.comparing(Schedule::getModifiedAt).reversed())
+                .map(ScheduleResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
