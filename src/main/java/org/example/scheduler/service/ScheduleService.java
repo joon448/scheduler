@@ -1,6 +1,7 @@
 package org.example.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduler.dto.ScheduleDeleteRequestDto;
 import org.example.scheduler.dto.ScheduleUpdateRequestDto;
 import org.example.scheduler.entity.Schedule;
 import org.example.scheduler.repository.ScheduleRepository;
@@ -63,5 +64,15 @@ public class ScheduleService {
         }
         scheduleRepository.flush(); // modifiedAt 반영
         return new ScheduleResponseDto(schedule);
+    }
+
+    public void delete(Long id, ScheduleDeleteRequestDto scheduleDeleteRequestDto) {
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalStateException("일정 삭제 실패: 존재하지 않는 ID 입니다."));
+
+        if(!schedule.getPassword().equals(scheduleDeleteRequestDto.getPassword())){
+            throw new IllegalStateException("일정 삭제 실패: 비밀번호가 일치하지 않습니다.");
+        }
+
+        scheduleRepository.delete(schedule);
     }
 }

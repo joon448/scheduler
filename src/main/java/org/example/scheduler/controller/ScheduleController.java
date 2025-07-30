@@ -1,6 +1,7 @@
 package org.example.scheduler.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduler.dto.ScheduleDeleteRequestDto;
 import org.example.scheduler.dto.ScheduleRequestDto;
 import org.example.scheduler.dto.ScheduleResponseDto;
 import org.example.scheduler.dto.ScheduleUpdateRequestDto;
@@ -36,6 +37,11 @@ public class ScheduleController {
     public ScheduleResponseDto updateSchedule(@PathVariable Long id, @RequestBody ScheduleUpdateRequestDto scheduleUpdateRequestDto) {
         return scheduleService.update(id, scheduleUpdateRequestDto);
 
+    }
+
+    @DeleteMapping("/schedules/{id}")
+    public void deleteSchedule(@PathVariable Long id, @RequestBody ScheduleDeleteRequestDto scheduleDeleteRequestDto) {
+        scheduleService.delete(id, scheduleDeleteRequestDto);
     }
 
 
