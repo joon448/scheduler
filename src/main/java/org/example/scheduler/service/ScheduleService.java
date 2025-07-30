@@ -41,4 +41,10 @@ public class ScheduleService {
                 .map(ScheduleResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public ScheduleResponseDto findById(Long id) {
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalStateException("존재하지 않는 ID 입니다."));
+        return new ScheduleResponseDto(schedule);
+    }
 }
