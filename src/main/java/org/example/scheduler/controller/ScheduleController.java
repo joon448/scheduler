@@ -3,6 +3,7 @@ package org.example.scheduler.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.dto.ScheduleRequestDto;
 import org.example.scheduler.dto.ScheduleResponseDto;
+import org.example.scheduler.dto.ScheduleUpdateRequestDto;
 import org.example.scheduler.service.ScheduleService;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,12 @@ public class ScheduleController {
     @GetMapping("/schedules/{id}")
     public ScheduleResponseDto getSchedule(@PathVariable Long id) {
         return scheduleService.findById(id);
+    }
+
+    @PutMapping("/schedules/{id}")
+    public ScheduleResponseDto updateSchedule(@PathVariable Long id, @RequestBody ScheduleUpdateRequestDto scheduleUpdateRequestDto) {
+        return scheduleService.update(id, scheduleUpdateRequestDto);
+
     }
 
 

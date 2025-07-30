@@ -1,6 +1,7 @@
 package org.example.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduler.dto.ScheduleUpdateRequestDto;
 import org.example.scheduler.entity.Schedule;
 import org.example.scheduler.repository.ScheduleRepository;
 import org.example.scheduler.dto.ScheduleRequestDto;
@@ -44,7 +45,23 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public ScheduleResponseDto findById(Long id) {
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalStateException("존재하지 않는 ID 입니다."));
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalStateException("일정 조회 실패: 존재하지 않는 ID 입니다."));
+        return new ScheduleResponseDto(schedule);
+    }
+
+    @Transactional
+    public ScheduleResponseDto update(Long id, ScheduleUpdateRequestDto scheduleUpdateRequestDto) {
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalStateException("일정 수정 실패: 존재하지 않는 ID 입니다."));
+        if(!schedule.getPassword().equals(scheduleUpdateRequestDto.getPassword())){
+            throw new IllegalStateException("일정 수정 실패: 비밀번호가 일치하지 않습니다.");
+        }
+        if(scheduleUpdateRequestDto.getName()!=null){
+            schedule.updateName(scheduleUpdateRequestDto.getName());
+        }
+        if(scheduleUpdateRequestDto.getTitle()!=null){
+            schedule.updateTitle(scheduleUpdateRequestDto.getTitle());
+        }
+        scheduleRepository.flush(); // modifiedAt 반영
         return new ScheduleResponseDto(schedule);
     }
 }
