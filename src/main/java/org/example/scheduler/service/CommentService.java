@@ -23,13 +23,4 @@ public class CommentService {
         commentRepository.save(comment);
         return new CommentResponseDto(comment);
     }
-
-    @Transactional(readOnly = true)
-    public List<CommentResponseDto> findAll(){
-        return commentRepository.findAll()
-                .stream()
-                .sorted(Comparator.comparing(Comment::getModifiedAt).reversed())
-                .map(CommentResponseDto::new)
-                .collect(Collectors.toList());
-    }
 }

@@ -1,6 +1,7 @@
 package org.example.scheduler.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduler.dto.ScheduleWithCommentsResponseDto;
 import org.example.scheduler.dto.comment.CommentRequestDto;
 import org.example.scheduler.dto.comment.CommentResponseDto;
 import org.example.scheduler.dto.schedule.ScheduleDeleteRequestDto;
@@ -33,7 +34,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedules/{id}")
-    public ScheduleResponseDto getSchedule(@PathVariable Long id) {
+    public ScheduleWithCommentsResponseDto getSchedule(@PathVariable Long id) {
         return scheduleService.findById(id);
     }
 

@@ -1,9 +1,13 @@
 package org.example.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduler.dto.ScheduleWithCommentsResponseDto;
+import org.example.scheduler.dto.comment.CommentResponseDto;
 import org.example.scheduler.dto.schedule.ScheduleDeleteRequestDto;
 import org.example.scheduler.dto.schedule.ScheduleUpdateRequestDto;
+import org.example.scheduler.entity.Comment;
 import org.example.scheduler.entity.Schedule;
+import org.example.scheduler.repository.CommentRepository;
 import org.example.scheduler.repository.ScheduleRepository;
 import org.example.scheduler.dto.schedule.ScheduleRequestDto;
 import org.example.scheduler.dto.schedule.ScheduleResponseDto;
@@ -18,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public ScheduleResponseDto save(ScheduleRequestDto scheduleRequestDto){
@@ -45,9 +50,15 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public ScheduleResponseDto findById(Long id) {
+    public ScheduleWithCommentsResponseDto findById(Long id) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalStateException("일정 조회 실패: 존재하지 않는 ID 입니다."));
-        return new ScheduleResponseDto(schedule);
+        List<CommentResponseDto> comments = commentRepository.findByScheduleId(id)
+                .stream()
+                .sorted(Comparator.comparing(Comment::getModifiedAt).reversed())
+                .map(CommentResponseDto::new)
+                .collect(Collectors.toList());
+
+        return new ScheduleWithCommentsResponseDto(new ScheduleResponseDto(schedule), comments);
     }
 
     @Transactional
