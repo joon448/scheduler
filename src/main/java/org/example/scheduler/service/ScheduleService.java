@@ -1,12 +1,12 @@
 package org.example.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.scheduler.dto.ScheduleDeleteRequestDto;
-import org.example.scheduler.dto.ScheduleUpdateRequestDto;
+import org.example.scheduler.dto.schedule.ScheduleDeleteRequestDto;
+import org.example.scheduler.dto.schedule.ScheduleUpdateRequestDto;
 import org.example.scheduler.entity.Schedule;
 import org.example.scheduler.repository.ScheduleRepository;
-import org.example.scheduler.dto.ScheduleRequestDto;
-import org.example.scheduler.dto.ScheduleResponseDto;
+import org.example.scheduler.dto.schedule.ScheduleRequestDto;
+import org.example.scheduler.dto.schedule.ScheduleResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +66,7 @@ public class ScheduleService {
         return new ScheduleResponseDto(schedule);
     }
 
+    @Transactional
     public void delete(Long id, ScheduleDeleteRequestDto scheduleDeleteRequestDto) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalStateException("일정 삭제 실패: 존재하지 않는 ID 입니다."));
 
