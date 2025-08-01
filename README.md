@@ -69,9 +69,7 @@ scheduler/
 ├── dto/                    # Request/Response DTO
 │   ├── comment/
 │   │   ├── CommentRequestDto
-│   │   ├── CommentResponseDto
-│   │   ├── CommentDeleteRequestDto
-│   │   └── CommentUpdateRequestDto
+│   │   └── CommentResponseDto
 │   └── schedule/
 │       ├── ScheduleRequestDto
 │       ├── ScheduleResponseDto
@@ -115,7 +113,7 @@ scheduler/
 | 기능 | Method | URL | 설명 |
 |------|--------|-----|------|
 | 일정 생성 | POST | `/schedules` | 새 일정 등록 |
-| 전체 조회 | GET | `/schedules?name=` | 작성자명 필터 가능 |
+| 전체 조회 | GET | `/schedules?name=` | 작성자명 필터 가능 (선택사항) |
 | 단일 조회 | GET | `/schedules/{id}` | 댓글 포함 응답 |
 | 일정 수정 | PATCH | `/schedules/{id}` | 제목/작성자명 수정, 비밀번호 필요 |
 | 일정 삭제 | DELETE | `/schedules/{id}` | 비밀번호 필요 |
@@ -267,4 +265,4 @@ scheduler/
 - Spring MVC 구조 이해 (Controller-Service-Repository)
 - DTO와 Entity 분리
 - JPA Auditing
-- 예외 처리 (`@ControllerAdvice`)
+- 예외 처리 (`ResponseStatusException`)
