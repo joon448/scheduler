@@ -5,14 +5,17 @@ import org.example.scheduler.entity.Comment;
 
 import java.time.LocalDateTime;
 
+/**
+ * 댓글 정보를 응답할 때 사용하는 DTO
+ */
 @Getter
 public class CommentResponseDto {
-    private final Long id;
-    private final String name;
-    private final String content;
-    private final Long scheduleId;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime modifiedAt;
+    private final Long id;                  // 댓글 ID
+    private final String name;              // 작성자명
+    private final String content;           // 내용
+    private final Long scheduleId;          // 일정 ID
+    private final LocalDateTime createdAt;  // 작성일
+    private final LocalDateTime modifiedAt; // 수정일
 
 
     public CommentResponseDto(Comment comment) {
