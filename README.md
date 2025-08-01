@@ -313,6 +313,8 @@ server:
   error:
     include-message:always
 ```
+#### 댓글 등록 시 유효하지 않은 일정 ID 처리
+- 존재하지 않는 일정에 댓글을 등록하려고 하면 404 응답을 반환하도록 검증 로직 추가 (`existsById`)
 
 ---
 

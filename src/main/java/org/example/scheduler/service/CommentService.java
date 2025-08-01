@@ -5,6 +5,7 @@ import org.example.scheduler.dto.comment.CommentRequestDto;
 import org.example.scheduler.dto.comment.CommentResponseDto;
 import org.example.scheduler.entity.Comment;
 import org.example.scheduler.repository.CommentRepository;
+import org.example.scheduler.repository.ScheduleRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,15 +15,23 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final ScheduleRepository scheduleRepository;
 
     @Transactional
     public CommentResponseDto save(CommentRequestDto commentRequestDto, Long scheduleId){
+        validateScheduleExists(scheduleId, "등록");
         validateCommentRequest(commentRequestDto, "등록");
         validateCommentLimit(scheduleId, "등록");
         Comment comment = new Comment(commentRequestDto.getName(), commentRequestDto.getPassword(), commentRequestDto.getContent(), scheduleId);
 
         commentRepository.save(comment);
         return new CommentResponseDto(comment);
+    }
+
+    private void validateScheduleExists(Long scheduleId, String action) {
+        if(!scheduleRepository.existsById(scheduleId)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "댓글 "+action+" 실패: 존재하지 않는 ID입니다.");
+        }
     }
 
     private void validateCommentRequest(CommentRequestDto commentRequestDto, String action) {
