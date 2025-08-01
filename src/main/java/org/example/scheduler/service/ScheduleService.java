@@ -11,8 +11,10 @@ import org.example.scheduler.repository.CommentRepository;
 import org.example.scheduler.repository.ScheduleRepository;
 import org.example.scheduler.dto.schedule.ScheduleRequestDto;
 import org.example.scheduler.dto.schedule.ScheduleResponseDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Comparator;
 import java.util.List;
@@ -27,6 +29,12 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponseDto save(ScheduleRequestDto scheduleRequestDto){
         Schedule schedule = new Schedule(scheduleRequestDto.getName(), scheduleRequestDto.getPassword(), scheduleRequestDto.getTitle(), scheduleRequestDto.getContent());
+        if(scheduleRequestDto.getTitle().length() > 30){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 등록 실패: 제목은 최대 30자까지 입력 가능합니다.");
+        }
+        if(scheduleRequestDto.getContent().length() > 200){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 등록 실패: 내용은 최대 200자까지 입력 가능합니다.");
+        }
         scheduleRepository.save(schedule);
         return new ScheduleResponseDto(schedule);
     }
@@ -51,7 +59,8 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public ScheduleWithCommentsResponseDto findById(Long id) {
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalStateException("일정 조회 실패: 존재하지 않는 ID 입니다."));
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "일정 조회 실패: 존재하지 않는 ID 입니다."));
         List<CommentResponseDto> comments = commentRepository.findByScheduleId(id)
                 .stream()
                 .sorted(Comparator.comparing(Comment::getModifiedAt).reversed())
@@ -63,9 +72,13 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleResponseDto update(Long id, ScheduleUpdateRequestDto scheduleUpdateRequestDto) {
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalStateException("일정 수정 실패: 존재하지 않는 ID 입니다."));
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "일정 수정 실패: 존재하지 않는 ID 입니다."));
         if(!schedule.getPassword().equals(scheduleUpdateRequestDto.getPassword())){
-            throw new IllegalStateException("일정 수정 실패: 비밀번호가 일치하지 않습니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "일정 수정 실패: 비밀번호가 일치하지 않습니다.");
+        }
+        if (scheduleUpdateRequestDto.getName() == null && scheduleUpdateRequestDto.getTitle() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 수정 실패: 수정할 항목이 없습니다.");
         }
         if(scheduleUpdateRequestDto.getName()!=null){
             schedule.updateName(scheduleUpdateRequestDto.getName());
@@ -79,10 +92,11 @@ public class ScheduleService {
 
     @Transactional
     public void delete(Long id, ScheduleDeleteRequestDto scheduleDeleteRequestDto) {
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()-> new IllegalStateException("일정 삭제 실패: 존재하지 않는 ID 입니다."));
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "일정 삭제 실패: 존재하지 않는 ID 입니다."));
 
         if(!schedule.getPassword().equals(scheduleDeleteRequestDto.getPassword())){
-            throw new IllegalStateException("일정 삭제 실패: 비밀번호가 일치하지 않습니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "일정 삭제 실패: 비밀번호가 일치하지 않습니다.");
         }
 
         scheduleRepository.delete(schedule);

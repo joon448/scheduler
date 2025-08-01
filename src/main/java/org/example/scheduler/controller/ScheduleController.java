@@ -34,7 +34,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedules/{id}")
-    public ScheduleWithCommentsResponseDto getSchedule(@PathVariable Long id) {
+    public ScheduleWithCommentsResponseDto getScheduleWithComments(@PathVariable Long id) {
         return scheduleService.findById(id);
     }
 
