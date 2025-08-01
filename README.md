@@ -54,7 +54,6 @@ Spring Boot를 활용하여 일정과 댓글을 관리하는 웹 애플리케이
 ## 실행 환경
 - Java 17
 - Spring Boot 3.x
-- Gradle
 - MySQL
 
 ---
@@ -133,7 +132,7 @@ scheduler/
 }
 ```
 - **Response**: 
-  - 성공시: 201 Created
+  - 성공시: 200 OK
 ```json
 {
   "id": Long,
@@ -145,7 +144,7 @@ scheduler/
 }
 ```
   - 실패시:
-    - 400 Bad Request: 필수값이 없는 경우
+    - 400 Bad Request: 필수값이 없는 경우, 길이 제한을 초과한 경우
 
 ---
 
@@ -180,12 +179,17 @@ scheduler/
   - 성공시: 200 OK
 ```json
 {
-  "id": Long,
-  "title": String,
-  "content": String,
-  "name": String,
-  "createdAt": DateTime,
-  "modifiedAt": DateTime
+  schedule: {
+    "id": Long,
+    "title": String,
+    "content": String,
+    "name": String,
+    "createdAt": DateTime,
+    "modifiedAt": DateTime
+  }
+  comments: [
+    //...
+  ]
 }
 ```
   - 실패시:
@@ -218,7 +222,7 @@ scheduler/
 ```
   - 실패시:
     - 404 Not Found: ID가 존재하지 않음
-    - 400 Bad Request: 필수값 누락
+    - 400 Bad Request: 필수값 누락, 길이 제한 초과, title&name 둘 다 없는 경우
     - 401 Unauthorized: 비밀번호 불일치
 
 ---
@@ -257,7 +261,31 @@ scheduler/
 ---
 
 ## 개발 중 해결한 문제
+#### 생성자 주입 오류 (final 누락)
+- @RequiredArgsConstructor 사용 시 final 누락으로 생성자 주입이 되지 않던 문제 해결
 
+#### 예외 처리 방식 개선
+- ResponseEntity 대신 ResponseStatusException 사용으로 코드 간결화 및 일관성 확보
+
+#### modifiedAt 값 미반영
+- @LastModifiedDate가 반영되지 않아 repository.flush()로 수동 반영
+
+#### 기능별 Request DTO 분리
+- 생성/수정/삭제 요청을 명확하게 구분하여 유지보수성과 가독성 향상
+
+#### 공통 검증 로직 분리
+- 중복 유효성 검사 로직을 validate 메서드로 분리해 재사용성과 가독성 향상
+
+#### 일정 삭제 시 댓글 자동 삭제
+- 일정 삭제 시 해당 일정의 댓글도 함께 삭제되도록 로직 추가
+
+#### 에러 메시지 클라이언트 응답 설정
+- application.yml에 아래 설정 추가하여 클라이언트에 상세 에러 메시지 전달
+```yaml
+server:
+  error:
+    include-message:always
+```
 
 ---
 
