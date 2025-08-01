@@ -27,13 +27,13 @@ public class CommentService {
 
     private void validateCommentRequest(CommentRequestDto commentRequestDto, String action) {
         if (commentRequestDto.getName() == null || commentRequestDto.getName().trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "댓글 "+action+" 실패: 작성자명은 필수입니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "댓글 "+action+" 실패: 작성자명을 입력해주세요.");
         }
         if (commentRequestDto.getPassword() == null || commentRequestDto.getPassword().trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "댓글 "+action+" 실패: 비밀번호는 필수입니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "댓글 "+action+" 실패: 비밀번호를 입력해주세요.");
         }
         if (commentRequestDto.getContent() == null || commentRequestDto.getContent().trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "댓글 "+action+" 실패: 내용은 필수입니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "댓글 "+action+" 실패: 내용을 입력해주세요.");
         }
         if(commentRequestDto.getName().length() > 20){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "댓글 "+action+" 실패: 작성자명은 최대 20자까지 입력 가능합니다.");

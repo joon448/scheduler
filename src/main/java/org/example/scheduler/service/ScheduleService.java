@@ -96,16 +96,16 @@ public class ScheduleService {
 
     private void validateScheduleRequest(ScheduleRequestDto scheduleRequestDto, String action) {
         if (scheduleRequestDto.getName() == null || scheduleRequestDto.getName().trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 "+action+" 실패: 작성자명은 필수입니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 "+action+" 실패: 작성자명을 입력해주세요.");
         }
         if (scheduleRequestDto.getPassword() == null || scheduleRequestDto.getPassword().trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 "+action+" 실패: 비밀번호는 필수입니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 "+action+" 실패: 비밀번호를 입력해주세요.");
         }
         if (scheduleRequestDto.getTitle() == null || scheduleRequestDto.getTitle().trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 "+action+" 실패: 제목은 필수입니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 "+action+" 실패: 제목을 입력해주세요.");
         }
         if (scheduleRequestDto.getContent() == null || scheduleRequestDto.getContent().trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 "+action+" 실패: 내용은 필수입니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 "+action+" 실패: 내용을 입력해주세요.");
         }
         if(scheduleRequestDto.getName().length() > 20){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 "+action+" 실패: 작성자명은 최대 20자까지 입력 가능합니다.");
@@ -120,7 +120,7 @@ public class ScheduleService {
 
     private void validateScheduleUpdateRequest(ScheduleUpdateRequestDto scheduleUpdateRequestDto, String action) {
         if (scheduleUpdateRequestDto.getPassword() == null || scheduleUpdateRequestDto.getPassword().trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 "+action+" 실패: 비밀번호는 필수입니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 "+action+" 실패: 비밀번호를 입력해주세요.");
         }
         if (scheduleUpdateRequestDto.getName() == null && scheduleUpdateRequestDto.getTitle() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 "+action+" 실패: 수정할 항목이 없습니다.");
