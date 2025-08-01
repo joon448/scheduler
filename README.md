@@ -243,7 +243,34 @@ scheduler/
     - 400 Bad Request: 필수값 누락
     - 401 Unauthorized: 비밀번호 불일치
 
+---
 
+### 댓글 생성
+- **Method**: POST
+- **URL**: /schedules/{id}/comments
+- **Request Body**:
+```json
+{
+  "content": String,
+  "name": String,
+  "password": String
+}
+```
+- **Response**: 
+  - 성공시: 200 OK
+```json
+{
+  "id": Long,
+  "content": String,
+  "name": String,
+  "scheduleId": Long,
+  "createdAt": DateTime,
+  "modifiedAt": DateTime
+}
+```
+  - 실패시:
+    - 404 Not Found: ID가 존재하지 않음
+    - 400 Bad Request: 필수값이 없는 경우, 길이 제한을 초과한 경우
 
 ---
 
