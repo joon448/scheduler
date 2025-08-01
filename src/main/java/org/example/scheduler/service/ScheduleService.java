@@ -1,7 +1,7 @@
 package org.example.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.scheduler.dto.ScheduleWithCommentsResponseDto;
+import org.example.scheduler.dto.schedule.ScheduleWithCommentsResponseDto;
 import org.example.scheduler.dto.comment.CommentResponseDto;
 import org.example.scheduler.dto.schedule.ScheduleDeleteRequestDto;
 import org.example.scheduler.dto.schedule.ScheduleUpdateRequestDto;

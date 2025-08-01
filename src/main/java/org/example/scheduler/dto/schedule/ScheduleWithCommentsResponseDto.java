@@ -1,8 +1,7 @@
-package org.example.scheduler.dto;
+package org.example.scheduler.dto.schedule;
 
 import lombok.Getter;
 import org.example.scheduler.dto.comment.CommentResponseDto;
-import org.example.scheduler.dto.schedule.ScheduleResponseDto;
 
 import java.util.List;
 
