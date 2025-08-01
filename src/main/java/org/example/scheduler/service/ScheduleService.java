@@ -85,6 +85,7 @@ public class ScheduleService {
         Schedule schedule = getScheduleOrThrow(id, "삭제");
         validatePassword(schedule, scheduleDeleteRequestDto.getPassword(), "삭제");
 
+        commentRepository.deleteByScheduleId(id);
         scheduleRepository.delete(schedule);
     }
 
