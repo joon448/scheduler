@@ -28,7 +28,7 @@ public class CommentService {
      * @return 생성된 댓글 응답 DTO (최신 수정일 순 정렬)
      */
     @Transactional
-    public CommentResponseDto save(CommentRequestDto commentRequestDto, Long scheduleId){
+    public CommentResponseDto saveComment(CommentRequestDto commentRequestDto, Long scheduleId){
         validateScheduleExists(scheduleId, "등록");
         validateCommentRequest(commentRequestDto, "등록");
         validateCommentLimit(scheduleId, "등록");

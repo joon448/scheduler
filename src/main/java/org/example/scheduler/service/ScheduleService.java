@@ -34,7 +34,7 @@ public class ScheduleService {
      * @return 생성된 일정 응답 DTO
      */
     @Transactional
-    public ScheduleResponseDto save(ScheduleRequestDto scheduleRequestDto){
+    public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequestDto){
         validateScheduleRequest(scheduleRequestDto, "등록");
         Schedule schedule = new Schedule(scheduleRequestDto.getName(), scheduleRequestDto.getPassword(), scheduleRequestDto.getTitle(), scheduleRequestDto.getContent());
 
@@ -49,7 +49,7 @@ public class ScheduleService {
      * @return 전체 일정 목록 응답 DTO (최신 수정일 순 정렬)
      */
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> findAll(){
+    public List<ScheduleResponseDto> getAllSchedules(){
         return scheduleRepository.findAll() // 최신 수정일 기준 내림차순 정렬
                 .stream()
                 .sorted(Comparator.comparing(Schedule::getModifiedAt).reversed())
@@ -64,7 +64,7 @@ public class ScheduleService {
      * @return 특정 작성자의 일정 목록 응답 DTO (최신 수정일 순 정렬)
      */
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> findByName(String name) {
+    public List<ScheduleResponseDto> getSchedulesByName(String name) {
         return scheduleRepository.findByName(name) // 최신 수정일 기준 내림차순 정렬
                 .stream()
                 .sorted(Comparator.comparing(Schedule::getModifiedAt).reversed())
@@ -79,7 +79,7 @@ public class ScheduleService {
      * @return 특정 일정 + 댓글 목록 응답 DTO (최신 수정일 순 정렬)
      */
     @Transactional(readOnly = true)
-    public ScheduleWithCommentsResponseDto findById(Long id) {
+    public ScheduleWithCommentsResponseDto getScheduleWithCommentsById(Long id) {
         Schedule schedule = getScheduleOrThrow(id, "조회");
 
         List<CommentResponseDto> comments = commentRepository.findByScheduleId(id) // 최신 수정일 기준 내림차순 정렬
@@ -99,7 +99,7 @@ public class ScheduleService {
      * @return 수정된 일정 정보 응답 DTO
      */
     @Transactional
-    public ScheduleResponseDto update(Long id, ScheduleUpdateRequestDto scheduleUpdateRequestDto) {
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleUpdateRequestDto scheduleUpdateRequestDto) {
         validateScheduleUpdateRequest(scheduleUpdateRequestDto, "수정");
         Schedule schedule = getScheduleOrThrow(id, "수정");
         validatePassword(schedule, scheduleUpdateRequestDto.getPassword(), "수정");
@@ -122,7 +122,7 @@ public class ScheduleService {
      * @param scheduleDeleteRequestDto 일정 삭제 요청 데이터
      */
     @Transactional
-    public void delete(Long id, ScheduleDeleteRequestDto scheduleDeleteRequestDto) {
+    public void deleteSchedule(Long id, ScheduleDeleteRequestDto scheduleDeleteRequestDto) {
         Schedule schedule = getScheduleOrThrow(id, "삭제");
         validatePassword(schedule, scheduleDeleteRequestDto.getPassword(), "삭제");
 

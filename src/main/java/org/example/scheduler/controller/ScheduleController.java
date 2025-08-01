@@ -24,7 +24,7 @@ public class ScheduleController {
      */
     @PostMapping("/schedules")
     public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.save(scheduleRequestDto);
+        return scheduleService.saveSchedule(scheduleRequestDto);
     }
 
     /**
@@ -36,9 +36,9 @@ public class ScheduleController {
     @GetMapping("/schedules")
     public List<ScheduleResponseDto> getSchedules(@RequestParam(required = false) String name) {
         if (name == null) {
-            return scheduleService.findAll();
+            return scheduleService.getAllSchedules();
         }
-        return scheduleService.findByName(name);
+        return scheduleService.getSchedulesByName(name);
     }
 
     /**
@@ -49,7 +49,7 @@ public class ScheduleController {
      */
     @GetMapping("/schedules/{id}")
     public ScheduleWithCommentsResponseDto getScheduleWithComments(@PathVariable Long id) {
-        return scheduleService.findById(id);
+        return scheduleService.getScheduleWithCommentsById(id);
     }
 
     /**
@@ -61,7 +61,7 @@ public class ScheduleController {
      */
     @PatchMapping("/schedules/{id}")
     public ScheduleResponseDto updateSchedule(@PathVariable Long id, @RequestBody ScheduleUpdateRequestDto scheduleUpdateRequestDto) {
-        return scheduleService.update(id, scheduleUpdateRequestDto);
+        return scheduleService.updateSchedule(id, scheduleUpdateRequestDto);
 
     }
 
@@ -73,7 +73,7 @@ public class ScheduleController {
      */
     @DeleteMapping("/schedules/{id}")
     public void deleteSchedule(@PathVariable Long id, @RequestBody ScheduleDeleteRequestDto scheduleDeleteRequestDto) {
-        scheduleService.delete(id, scheduleDeleteRequestDto);
+        scheduleService.deleteSchedule(id, scheduleDeleteRequestDto);
     }
 
     /**
@@ -85,7 +85,7 @@ public class ScheduleController {
      */
     @PostMapping("/schedules/{scheduleId}/comments")
     public CommentResponseDto createComment(@PathVariable Long scheduleId, @RequestBody CommentRequestDto commentRequestDto){
-        return commentService.save(commentRequestDto, scheduleId);
+        return commentService.saveComment(commentRequestDto, scheduleId);
     }
 
 }
